@@ -1,0 +1,23 @@
+language: go
+
+go:
+  - 1.8.x
+
+env:
+  - GO_ENV=test
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database go_web_test;' -U postgres
+  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
+
+go_import_path: github.com/joshgav/go-web/go_web
+
+install:
+  - go get github.com/gobuffalo/buffalo/buffalo
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
+
+script: buffalo test
