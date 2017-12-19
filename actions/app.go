@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/middleware/csrf"
 	"github.com/gobuffalo/buffalo/middleware/i18n"
 	"github.com/gobuffalo/packr"
-	"github.com/joshgav/go-web/go_web/models"
+	"github.com/joshgav/go-web/models"
 )
 
 // ENV is used to help switch settings based on where the
@@ -25,12 +25,13 @@ var T *i18n.Translator
 func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.New(buffalo.Options{
+			Addr:        "0.0.0.0:" + envy.Get("PORT", "3000"),
 			Env:         ENV,
-			SessionName: "_go_web_session",
+			SessionName: "_go-web_session",
 		})
 		// Automatically redirect to SSL
 		app.Use(ssl.ForceSSL(secure.Options{
-			SSLRedirect:     ENV == "production",
+			SSLRedirect:     false, // ENV == "production",
 			SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
 		}))
 

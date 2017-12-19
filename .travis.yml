@@ -10,10 +10,10 @@ services:
   - postgresql
 
 before_script:
-  - psql -c 'create database go_web_test;' -U postgres
+  - psql -c 'create database goweb_test;' -U postgres
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
-go_import_path: github.com/joshgav/go-web/go_web
+go_import_path: github.com/joshgav/go-web
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo

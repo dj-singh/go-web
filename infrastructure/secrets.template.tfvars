@@ -1,0 +1,8 @@
+az_sub_id = ""
+az_tenant_id = ""
+az_client_id = ""
+az_client_secret = ""
+az_location = "westus2"
+az_location_pg = "westus"
+pguser = "postgres"
+pgpassword = ""

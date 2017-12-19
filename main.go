@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/joshgav/go-web/go_web/actions"
+	"github.com/joshgav/go-web/actions"
 )
 
 func main() {
