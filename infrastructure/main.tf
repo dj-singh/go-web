@@ -15,15 +15,15 @@ provider "azurerm" {
   version = "~> 1.0" 
 }
 
-resource "azurerm_resource_group" "databases" {
-  name = "databases"
+resource "azurerm_resource_group" "dbs" {
+  name = "joshgav-go-test01-dbs"
   location = "${var.az_location}"
 }
 
 resource "azurerm_postgresql_server" "pg-server" {
-  name = "pg-server-01"
+  name = "joshgav-go-test01-pg"
   location = "${var.az_location_pg}"
-  resource_group_name = "${azurerm_resource_group.databases.name}"
+  resource_group_name = "${azurerm_resource_group.dbs.name}"
 
   sku {
     name = "PGSQLB50"
@@ -40,7 +40,7 @@ resource "azurerm_postgresql_server" "pg-server" {
 
 resource "azurerm_postgresql_firewall_rule" "pg-fw-rule" {
   name                = "unsafe-allow-all"
-  resource_group_name = "${azurerm_resource_group.databases.name}"
+  resource_group_name = "${azurerm_resource_group.dbs.name}"
   server_name         = "${azurerm_postgresql_server.pg-server.name}"
   start_ip_address    = "0.0.0.0"
   end_ip_address      = "255.255.255.255"
@@ -48,7 +48,7 @@ resource "azurerm_postgresql_firewall_rule" "pg-fw-rule" {
 
 resource "azurerm_postgresql_database" "pg-go-web" {
   name                = "goweb"
-  resource_group_name = "${azurerm_resource_group.databases.name}"
+  resource_group_name = "${azurerm_resource_group.dbs.name}"
   server_name         = "${azurerm_postgresql_server.pg-server.name}"
   charset             = "UTF8"
   collation           = "en_US"
