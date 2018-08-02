@@ -1,22 +1,16 @@
-FROM gobuffalo/buffalo:v0.10.2 as builder
+# Docker images listed at https://github.com/docker-library/official-images/blob/master/library/golang
+FROM golang:1.10.3-stretch
+# FROM golang:1.10.3-alpine3.8
+# FROM golang:1.10.3-windowsservercore-1803
+ARG PROJECT=github.com/joshgav/go-web
 
-RUN mkdir -p ${GOPATH%%:*}/src/github.com/joshgav/go-web
-WORKDIR $GOPATH/src/github.com/joshgav/go-web
+RUN mkdir /app # for built artifacts
+RUN mkdir -p $GOPATH/src/${PROJECT}
+WORKDIR $GOPATH/src/${PROJECT}
 
-ADD package.json .
-ADD yarn.lock .
-RUN yarn install --no-progress
-ADD . .
-RUN dep ensure
-RUN buffalo build --static -o /bin/app
+# better for build cache to specify necessary files
+ADD ["Gopkg.*","main.go", "./"]
+RUN go get -u -v github.com/golang/dep/cmd/dep && dep ensure -v
+RUN go build -v -o /app/server .
 
-
-FROM alpine
-RUN apk add --no-cache bash
-RUN apk add --no-cache ca-certificates
-
-WORKDIR /bin/
-COPY --from=builder /bin/app .
-
-EXPOSE 3000
-CMD exec /bin/app
+CMD ["/app/server"]
